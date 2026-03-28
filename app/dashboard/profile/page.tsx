@@ -95,27 +95,25 @@ export default function ProfilePage() {
 
       {/* Portfolio Summary */}
       <section className="space-y-2">
-        <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/30">
-          <div className="flex justify-between items-start mb-2">
+        <div className="sovereign-card">
+          <div className="flex justify-between items-start mb-3">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-secondary mb-1">Total Saldo Emas</p>
-              <h2 className="font-headline font-extrabold text-3xl text-primary tracking-tighter">
+              <p className="text-micro text-secondary mb-2">Total Saldo Emas</p>
+              <h2 className="text-display text-3xl text-gradient-gold">
                 {userProfile?.total_gold_grams?.toLocaleString('id-ID', { maximumFractionDigits: 2 }) || '0'}{' '}
-                <span className="text-lg font-bold">gr</span>
+                <span className="text-lg font-bold text-on-surface">gr</span>
               </h2>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-secondary mb-1">Nilai Saat Ini</p>
-              <p className="font-headline font-extrabold text-xl text-on-surface tracking-tight">
+              <p className="text-micro text-secondary mb-2">Nilai Saat Ini</p>
+              <p className="text-display text-xl text-on-surface">
                 Rp {totalValue.toLocaleString('id-ID', { maximumFractionDigits: 0 })}
               </p>
             </div>
           </div>
           <div className="mt-6 pt-4 border-t border-surface-container flex items-center justify-between">
-            <span className="flex items-center gap-1 text-[11px] font-bold text-on-tertiary-container bg-tertiary-container/20 px-2 py-0.5 rounded">
-              📈 +4.2% Bulan Ini
-            </span>
-            <Link href="/dashboard/vault" className="text-[11px] font-bold text-primary flex items-center gap-1 hover:underline">
+            <span className="status-chip trending">📈 +4.2% Bulan Ini</span>
+            <Link href="/dashboard/vault" className="text-sm font-bold text-primary hover:underline">
               Lihat Rincian →
             </Link>
           </div>

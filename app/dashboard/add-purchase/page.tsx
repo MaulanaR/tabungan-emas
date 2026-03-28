@@ -169,7 +169,7 @@ export default function AddPurchasePage() {
     <div className="space-y-8">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="font-headline text-3xl font-extrabold text-on-surface">Tambah Pembelian Emas</h1>
+        <h1 className="text-display text-3xl text-on-surface">Tambah Pembelian Emas</h1>
         <p className="text-on-surface-variant">Catat pembelian emas baru Anda di sini</p>
       </div>
 
@@ -178,14 +178,14 @@ export default function AddPurchasePage() {
 
       {/* Success Message */}
       {success && (
-        <div className="bg-tertiary-fixed/20 border border-tertiary-fixed p-4 rounded-lg">
-          <p className="text-on-tertiary-container font-medium">✓ Pembelian berhasil dicatat!</p>
+        <div className="sovereign-card border-l-4 border-success">
+          <p className="text-success font-medium">✓ Pembelian berhasil dicatat!</p>
         </div>
       )}
 
       {/* Error Message */}
       {error && (
-        <div className="bg-error-container/20 border border-error-container p-4 rounded-lg">
+        <div className="sovereign-card border-l-4 border-error">
           <p className="text-error font-medium">{error}</p>
         </div>
       )}
@@ -325,14 +325,14 @@ export default function AddPurchasePage() {
         </div>
 
         {/* Total Preview */}
-        <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
+        <div className="sovereign-card">
           <div className="flex justify-between items-center mb-2">
             <span className="text-on-surface-variant text-sm">Total Harga:</span>
-            <span className="font-headline font-extrabold text-xl text-primary">
+            <span className="text-display text-xl text-gradient-gold">
               Rp {totalPrice.toLocaleString('id-ID', { maximumFractionDigits: 0 })}
             </span>
           </div>
-          <p className="text-[10px] text-on-surface-variant">
+          <p className="text-xs text-on-surface-variant">
             {weightGrams.toLocaleString('id-ID', { maximumFractionDigits: 2 })} gr @ Rp{' '}
             {pricePerGram.toLocaleString('id-ID', { maximumFractionDigits: 0 })}/gr
           </p>
@@ -343,13 +343,13 @@ export default function AddPurchasePage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-lg shadow-lg hover:shadow-primary/20 hover:opacity-95 active:scale-[0.98] transition-all disabled:opacity-50"
+            className="btn-gold-clad flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Menyimpan...' : 'Simpan Pembelian'}
           </button>
           <Link
             href="/dashboard/vault"
-            className="flex-1 text-center bg-surface-container-lowest text-on-surface font-headline font-bold py-4 rounded-lg border border-outline-variant/30 hover:bg-surface-container transition-colors"
+            className="flex-1 text-center sovereign-card text-on-surface font-display font-bold py-4 hover:bg-surface-container transition-colors"
           >
             Batal
           </Link>

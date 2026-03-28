@@ -126,9 +126,9 @@ export default function AdminUsersPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-surface-container rounded-lg border border-outline-variant/20 overflow-hidden">
+        <div className="sovereign-card overflow-hidden">
           {/* Table Header */}
-          <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container-lowest border-b border-outline-variant/20 font-bold text-sm text-on-surface">
+          <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container border-b border-surface-container-high text-sm font-bold text-on-surface">
             <div className="col-span-3">Email</div>
             <div className="col-span-2">Nama</div>
             <div className="col-span-2">Role</div>
@@ -138,15 +138,15 @@ export default function AdminUsersPage() {
           </div>
 
           {/* Table Body */}
-          <div className="divide-y divide-outline-variant/20">
+          <div className="divide-y divide-surface-container-high">
             {users.map((user) => (
               <div
                 key={user.id}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-0 px-6 py-4 hover:bg-surface-container-lowest transition-colors"
+                className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-0 px-6 py-4 hover:bg-surface-container-low transition-colors"
               >
                 {/* Email */}
                 <div className="md:col-span-3">
-                  <p className="text-xs font-bold text-on-surface-variant md:hidden mb-1">
+                  <p className="text-micro text-on-surface-variant md:hidden mb-1">
                     Email
                   </p>
                   <p className="text-on-surface break-all text-sm font-medium">
@@ -156,7 +156,7 @@ export default function AdminUsersPage() {
 
                 {/* Name */}
                 <div className="md:col-span-2">
-                  <p className="text-xs font-bold text-on-surface-variant md:hidden mb-1">
+                  <p className="text-micro text-on-surface-variant md:hidden mb-1">
                     Nama
                   </p>
                   <p className="text-on-surface text-sm">
@@ -166,7 +166,7 @@ export default function AdminUsersPage() {
 
                 {/* Role */}
                 <div className="md:col-span-2">
-                  <p className="text-xs font-bold text-on-surface-variant md:hidden mb-1">
+                  <p className="text-micro text-on-surface-variant md:hidden mb-1">
                     Role
                   </p>
                   <select
@@ -178,7 +178,7 @@ export default function AdminUsersPage() {
                       )
                     }
                     disabled={updating === user.id}
-                    className="px-3 py-1 rounded-lg text-sm font-bold border border-outline-variant/20 bg-surface-container text-on-surface disabled:opacity-50"
+                    className="w-full px-3 py-1.5 rounded-lg text-sm font-bold bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                   >
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
@@ -187,7 +187,7 @@ export default function AdminUsersPage() {
 
                 {/* Tier */}
                 <div className="md:col-span-2">
-                  <p className="text-xs font-bold text-on-surface-variant md:hidden mb-1">
+                  <p className="text-micro text-on-surface-variant md:hidden mb-1">
                     Tier
                   </p>
                   <select
@@ -199,7 +199,7 @@ export default function AdminUsersPage() {
                       )
                     }
                     disabled={updating === user.id}
-                    className="px-3 py-1 rounded-lg text-sm font-bold border border-outline-variant/20 bg-surface-container text-on-surface disabled:opacity-50"
+                    className="w-full px-3 py-1.5 rounded-lg text-sm font-bold bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                   >
                     <option value="FREE">FREE</option>
                     <option value="LITE">LITE</option>
@@ -210,20 +210,20 @@ export default function AdminUsersPage() {
 
                 {/* Purchases */}
                 <div className="md:col-span-1">
-                  <p className="text-xs font-bold text-on-surface-variant md:hidden mb-1">
+                  <p className="text-micro text-on-surface-variant md:hidden mb-1">
                     Pembelian
                   </p>
                   <div className="flex items-center gap-2">
                     <span className="text-on-surface text-sm font-bold">
                       {user.purchases_this_year || 0}
                     </span>
-                    <TierBadge tier={user.tier} className="!px-1.5 !py-0.5 !text-[10px]" />
+                    <TierBadge tier={user.tier} className="!px-2 !py-0.5 !text-[10px]" />
                   </div>
                 </div>
 
                 {/* Registered Date */}
                 <div className="md:col-span-2">
-                  <p className="text-xs font-bold text-on-surface-variant md:hidden mb-1">
+                  <p className="text-micro text-on-surface-variant md:hidden mb-1">
                     Terdaftar
                   </p>
                   <p className="text-on-surface-variant text-sm">
@@ -237,9 +237,9 @@ export default function AdminUsersPage() {
       )}
 
       {/* Info Box */}
-      <div className="bg-blue-100 border border-blue-300 rounded-lg p-4 text-blue-900">
-        <p className="font-bold text-sm mb-2">💡 Informasi</p>
-        <ul className="text-sm space-y-1">
+      <div className="sovereign-card border-l-4 border-primary">
+        <p className="font-display font-bold text-sm mb-3">💡 Informasi</p>
+        <ul className="text-sm space-y-2 text-on-surface-variant">
           <li>• Admin dapat membuat dan mengelola wawasan pasar</li>
           <li>• User hanya dapat melihat wawasan dan mengelola pembelian mereka</li>
           <li>• Ubah role pengguna dengan dropdown di kolom Role</li>
