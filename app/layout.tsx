@@ -39,7 +39,38 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <Analytics />
+        <MigrationRunner />
       </body>
     </html>
   )
 }
+
+function MigrationRunner() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          (function() {
+            // Run migrations only once per session
+            if (typeof window !== 'undefined' && !sessionStorage.getItem('migrationsRun')) {
+              fetch('/api/migrate')
+                .then(res => res.json())
+                .then(data => {
+                  if (data.success) {
+                    console.log('Database migrations completed successfully');
+                    sessionStorage.setItem('migrationsRun', 'true');
+                  } else {
+                    console.warn('Migration warning:', data.error);
+                  }
+                })
+                .catch(err => {
+                  console.error('Migration error:', err);
+                });
+            }
+          })();
+        `,
+      }}
+    />
+  )
+}
+

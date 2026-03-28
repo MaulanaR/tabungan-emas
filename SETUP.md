@@ -27,7 +27,8 @@ Copy SELURUH kode di bawah ini dan paste ke SQL Editor:
 CREATE TABLE IF NOT EXISTS public.users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT UNIQUE NOT NULL,
-  full_name TEXT,
+  first_name TEXT,
+  last_name TEXT,
   phone TEXT,
   profile_picture_url TEXT,
   total_gold_grams NUMERIC(10, 2) DEFAULT 0,
@@ -63,15 +64,46 @@ CREATE TABLE IF NOT EXISTS public.gold_prices (
   fetched_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
 
+-- Create payments table
+CREATE TABLE IF NOT EXISTS public.payments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id TEXT UNIQUE NOT NULL,
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  amount NUMERIC(15, 2) NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  payment_type TEXT,
+  transaction_status TEXT,
+  fraud_status TEXT,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
+-- Create transactions table
+CREATE TABLE IF NOT EXISTS public.transactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  amount NUMERIC(15, 2) NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('credit', 'debit')),
+  description TEXT,
+  reference_id TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_gold_purchases_user_id ON public.gold_purchases(user_id);
 CREATE INDEX IF NOT EXISTS idx_gold_purchases_purchase_date ON public.gold_purchases(purchase_date);
 CREATE INDEX IF NOT EXISTS idx_gold_prices_brand ON public.gold_prices(brand);
+CREATE INDEX IF NOT EXISTS idx_payments_user_id ON public.payments(user_id);
+CREATE INDEX IF NOT EXISTS idx_payments_order_id ON public.payments(order_id);
+CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON public.transactions(user_id);
 
 -- Enable Row Level Security
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.gold_purchases ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.gold_prices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for users
 DROP POLICY IF EXISTS "users_select_own" ON public.users;
@@ -97,15 +129,39 @@ CREATE POLICY "purchases_delete_own" ON public.gold_purchases FOR DELETE USING (
 DROP POLICY IF EXISTS "prices_select_public" ON public.gold_prices;
 CREATE POLICY "prices_select_public" ON public.gold_prices FOR SELECT USING (true);
 
+-- RLS Policies for payments
+DROP POLICY IF EXISTS "payments_select_own" ON public.payments;
+CREATE POLICY "payments_select_own" ON public.payments FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "payments_insert_own" ON public.payments;
+CREATE POLICY "payments_insert_own" ON public.payments FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "payments_update_own" ON public.payments;
+CREATE POLICY "payments_update_own" ON public.payments FOR UPDATE USING (true);
+
+DROP POLICY IF EXISTS "payments_notification_webhook" ON public.payments;
+CREATE POLICY "payments_notification_webhook" ON public.payments FOR UPDATE USING (true);
+
+-- RLS Policies for transactions
+DROP POLICY IF EXISTS "transactions_select_own" ON public.transactions;
+CREATE POLICY "transactions_select_own" ON public.transactions FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "transactions_insert_system" ON public.transactions;
+CREATE POLICY "transactions_insert_system" ON public.transactions FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "transactions_insert_own" ON public.transactions;
+CREATE POLICY "transactions_insert_own" ON public.transactions FOR INSERT WITH CHECK (auth.uid() = user_id);
+
 -- Auto-create user profile on sign up
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.users (id, email, full_name)
+  INSERT INTO public.users (id, email, first_name, last_name)
   VALUES (
     new.id,
     new.email,
-    COALESCE(new.raw_user_meta_data->>'full_name', '')
+    COALESCE(new.raw_user_meta_data->>'first_name', new.raw_user_meta_data->>'full_name', ''),
+    COALESCE(new.raw_user_meta_data->>'last_name', '')
   )
   ON CONFLICT (id) DO NOTHING;
   RETURN new;

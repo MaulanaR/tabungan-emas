@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gold-gradient text-on-primary-container font-extrabold shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0',
+        default: 'bg-gold-gradient text-on-surface font-extrabold shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0',
         destructive:
           'bg-error text-white hover:bg-error/90 font-semibold',
         outline:
@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost:
           'bg-transparent hover:bg-surface-container',
         link: 'text-primary underline-offset-4 hover:underline font-medium',
-        gold: 'bg-gold-gradient text-on-primary-container font-display font-extrabold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0',
+        gold: 'bg-gold-gradient text-on-surface font-display font-extrabold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0',
       },
       size: {
         default: 'h-10 px-4 py-2.5 has-[>svg]:px-3',

@@ -1,7 +1,27 @@
 import { updateSession } from '@/lib/supabase/proxy'
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // Trigger migrations on first visit
+  if (request.nextUrl.pathname === '/') {
+    const shouldRunMigrations = !request.cookies.get('migrations-run')
+
+    if (shouldRunMigrations) {
+      // Call migration API in the background
+      const response = await updateSession(request)
+
+      // Set migration flag
+      response.cookies.set('migrations-run', 'true', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 3600, // 1 hour
+      })
+
+      return response
+    }
+  }
+
   return await updateSession(request)
 }
 

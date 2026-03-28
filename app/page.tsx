@@ -23,7 +23,7 @@ export default function Home() {
 
   if (isLoggedIn === null) {
     return (
-      <div className="min-h-screen bg-surface-container-low flex items-center justify-center">
+      <div className="min-h-screen surface-depth-1 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin text-5xl mb-4">⏳</div>
           <p className="text-on-surface-variant">Memproses...</p>
@@ -34,11 +34,11 @@ export default function Home() {
 
   if (isLoggedIn) {
     return (
-      <div className="min-h-screen bg-surface-container-low flex items-center justify-center px-6">
+      <div className="min-h-screen surface-depth-1 flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="mb-8">
             <div className="text-6xl mb-4">🏦</div>
-            <h1 className="font-headline text-4xl font-extrabold text-on-surface tracking-tight mb-4">
+            <h1 className="text-display text-4xl text-on-surface tracking-tight mb-4">
               The Sovereign Vault
             </h1>
             <p className="text-on-surface-variant text-lg">
@@ -48,7 +48,7 @@ export default function Home() {
 
           <Link
             href="/dashboard/vault"
-            className="inline-block w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-lg shadow-lg hover:shadow-primary/20 hover:opacity-95 active:scale-[0.98] transition-all mb-4"
+            className="btn-gold-clad inline-block w-full mb-4"
           >
             Buka Brankas
           </Link>
@@ -58,7 +58,7 @@ export default function Home() {
               await supabase.auth.signOut()
               setIsLoggedIn(false)
             }}
-            className="w-full text-center text-primary font-bold py-3 rounded-lg border border-primary/30 hover:bg-primary/5 transition-colors"
+            className="w-full text-center text-on-surface font-display font-bold py-3 rounded-lg border-2 border-outline-variant/30 hover:border-primary hover:bg-primary/5 transition-colors"
           >
             Keluar
           </button>
@@ -68,11 +68,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-container-low flex flex-col items-center justify-center px-6 py-12">
+    <div className="min-h-screen surface-depth-1 flex flex-col items-center justify-center px-6 py-12">
       <div className="text-center max-w-md space-y-8">
         <div className="space-y-4">
           <div className="text-6xl mb-4">🏦</div>
-          <h1 className="font-headline text-4xl font-extrabold text-on-surface tracking-tight">
+          <h1 className="text-display text-4xl text-on-surface tracking-tight">
             The Sovereign Vault
           </h1>
           <p className="text-on-surface-variant text-lg">
@@ -83,21 +83,21 @@ export default function Home() {
         <div className="space-y-3 pt-8">
           <Link
             href="/auth/login"
-            className="w-full block text-center bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold py-5 rounded-lg shadow-lg hover:shadow-primary/20 hover:opacity-95 active:scale-[0.98] transition-all"
+            className="btn-gold-clad block w-full"
           >
             Masuk
           </Link>
 
           <Link
             href="/auth/sign-up"
-            className="w-full block text-center bg-surface-container-lowest text-on-surface font-headline font-bold py-5 rounded-lg border-2 border-primary/30 hover:border-primary hover:bg-primary/5 active:scale-[0.98] transition-all"
+            className="w-full block text-center surface-card text-on-surface font-display font-bold py-5 rounded-xl border-2 border-outline-variant/30 hover:border-primary hover:bg-primary/5 active:scale-[0.98] transition-all"
           >
             Daftar Akun Baru
           </Link>
         </div>
 
         <div className="pt-8 border-t border-outline-variant/20 space-y-2 opacity-60">
-          <p className="text-[10px] font-bold uppercase tracking-widest">Fitur Utama</p>
+          <p className="text-micro">Fitur Utama</p>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <span className="text-2xl">🔐</span>

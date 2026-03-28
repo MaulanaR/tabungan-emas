@@ -38,25 +38,6 @@ export default function AddPurchasePage() {
     fetchTierInfo()
   }, [])
 
-  const fetchGoldPrices = async () => {
-    try {
-      const { data } = await supabase
-        .from('gold_prices')
-        .select('*')
-        .order('fetched_at', { ascending: false })
-        .limit(10)
-
-      if (data) {
-        const uniqueBrands = Array.from(
-          new Map(data.map((item) => [item.brand, item])).values()
-        )
-        setGoldPrices(uniqueBrands)
-      }
-    } catch (err) {
-      console.error('Error fetching gold prices:', err)
-    }
-  }
-
   const fetchTierInfo = async () => {
     try {
       const response = await fetch('/api/tier-info')
@@ -204,11 +185,10 @@ export default function AddPurchasePage() {
                   key={price.brand}
                   type="button"
                   onClick={() => handleSelectBrand(price.brand)}
-                  className={`p-3 rounded-lg font-bold transition-all ${
-                    formData.brand === price.brand
+                  className={`p-3 rounded-lg font-bold transition-all ${formData.brand === price.brand
                       ? 'bg-primary text-on-primary shadow-lg'
                       : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface hover:border-primary'
-                  }`}
+                    }`}
                 >
                   {price.brand}
                 </button>
