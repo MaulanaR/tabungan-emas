@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node scripts/run-migrations.js && next dev",
+    "build": "node scripts/run-migrations.js && next build",
+    "start": "node scripts/run-migrations.js && next start",
+    "migrate": "node scripts/run-migrations.js",
     "lint": "eslint ."
   },
   "dependencies": {

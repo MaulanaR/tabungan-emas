@@ -34,7 +34,6 @@ export default function AddPurchasePage() {
   const supabase = createClient()
 
   useEffect(() => {
-    fetchGoldPrices()
     fetchTierInfo()
   }, [])
 
@@ -56,7 +55,7 @@ export default function AddPurchasePage() {
         .from('gold_prices')
         .select('*')
         .order('fetched_at', { ascending: false })
-        .limit(10)
+        .limit(20)
 
       if (data) {
         const uniqueBrands = Array.from(
@@ -68,6 +67,23 @@ export default function AddPurchasePage() {
       console.error('Error fetching gold prices:', err)
     }
   }
+
+  useEffect(() => {
+    fetchGoldPrices()
+
+    const channel = supabase
+      .channel('gold_prices_changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'gold_prices',
+      }, fetchGoldPrices)
+      .subscribe()
+
+    return () => {
+      channel.unsubscribe()
+    }
+  }, [supabase])
 
   const handleSelectBrand = (brand: string) => {
     const priceData = goldPrices.find((p) => p.brand === brand)
