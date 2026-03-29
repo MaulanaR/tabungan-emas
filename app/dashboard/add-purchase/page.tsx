@@ -33,6 +33,9 @@ export default function AddPurchasePage() {
   const router = useRouter()
   const supabase = createClient()
 
+  // Allowed gold brands
+  const allowedBrands = ['Antam', 'UBS', 'Emasku', 'Waris', 'Galeri24']
+
   useEffect(() => {
     fetchTierInfo()
   }, [])
@@ -61,7 +64,11 @@ export default function AddPurchasePage() {
         const uniqueBrands = Array.from(
           new Map(data.map((item) => [item.brand, item])).values()
         )
-        setGoldPrices(uniqueBrands)
+        // Filter only allowed brands
+        const filteredBrands = uniqueBrands.filter((brand) =>
+          allowedBrands.includes(brand.brand)
+        )
+        setGoldPrices(filteredBrands)
       }
     } catch (err) {
       console.error('Error fetching gold prices:', err)
@@ -86,6 +93,11 @@ export default function AddPurchasePage() {
   }, [supabase])
 
   const handleSelectBrand = (brand: string) => {
+    if (!allowedBrands.includes(brand)) {
+      console.warn(`Brand "${brand}" is not allowed`)
+      return
+    }
+
     const priceData = goldPrices.find((p) => p.brand === brand)
     setFormData({
       ...formData,
@@ -96,6 +108,13 @@ export default function AddPurchasePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate brand
+    if (!allowedBrands.includes(formData.brand)) {
+      setError('Brand emas tidak valid. Hanya brand Antam, UBS, Emasku, Waris, dan Galeri24 yang diperbolehkan.')
+      return
+    }
+
     setError('')
     setLoading(true)
 
@@ -194,31 +213,22 @@ export default function AddPurchasePage() {
           <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
             Brand Emas
           </label>
-          <div className="grid grid-cols-2 gap-2">
-            {goldPrices.length > 0 ? (
-              goldPrices.map((price) => (
-                <button
-                  key={price.brand}
-                  type="button"
-                  onClick={() => handleSelectBrand(price.brand)}
-                  className={`p-3 rounded-lg font-bold transition-all ${formData.brand === price.brand
-                      ? 'bg-primary text-on-primary shadow-lg'
-                      : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface hover:border-primary'
-                    }`}
-                >
-                  {price.brand}
-                </button>
-              ))
-            ) : (
-              <input
-                type="text"
-                value={formData.brand}
-                onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                placeholder="Brand emas"
-                className="col-span-2 w-full bg-surface-container-lowest border-b-2 border-outline-variant/20 focus:border-primary text-on-surface py-3 px-2 rounded-lg focus:outline-none"
-              />
-            )}
-          </div>
+          <select
+            value={formData.brand}
+            onChange={(e) => handleSelectBrand(e.target.value)}
+            className="w-full bg-surface-container-lowest border-b-2 border-outline-variant/20 focus:border-primary text-on-surface py-3 px-2 rounded-lg focus:outline-none"
+            required
+          >
+            <option value="">Pilih Brand Emas</option>
+            {allowedBrands.map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
+              </option>
+            ))}
+          </select>
+          <p className="text-[10px] text-on-surface-variant mt-1">
+            Brand yang tersedia: Antam, UBS, Emasku, Waris, Galeri24
+          </p>
         </div>
 
         {/* Weight Input */}
